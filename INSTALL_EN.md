@@ -67,3 +67,52 @@ npm run docker:up
 ```
 Provide `JWT_SECRET`, `ENCRYPTION_KEY`, and other required variables via environment in `docker-compose.yml`.
 
+Sample docker-compose:
+```yaml
+version: '3.8'
+services:
+  codex-relay:
+    build: .
+    image: codex-relay-service:latest
+    restart: unless-stopped
+    ports:
+      - "0.0.0.0:${PORT:-3000}:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOST=0.0.0.0
+      - JWT_SECRET=${JWT_SECRET}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+      - API_KEY_PREFIX=${API_KEY_PREFIX:-cr_}
+      - WEB_SESSION_SECRET=${WEB_SESSION_SECRET:-CHANGE_ME_SESSION_SECRET}
+      - ADMIN_USERNAME=${ADMIN_USERNAME:-}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-}
+      - REDIS_DB=${REDIS_DB:-0}
+      - GEMINI_OAUTH_CLIENT_ID=${GEMINI_OAUTH_CLIENT_ID:-}
+      - GEMINI_OAUTH_CLIENT_SECRET=${GEMINI_OAUTH_CLIENT_SECRET:-}
+      - DEFAULT_PROXY_TIMEOUT=${DEFAULT_PROXY_TIMEOUT:-600000}
+      - MAX_PROXY_RETRIES=${MAX_PROXY_RETRIES:-3}
+      - PROXY_USE_IPV4=${PROXY_USE_IPV4:-true}
+      - REQUEST_TIMEOUT=${REQUEST_TIMEOUT:-600000}
+      - DEFAULT_TOKEN_LIMIT=${DEFAULT_TOKEN_LIMIT:-1000000}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - LOG_MAX_SIZE=${LOG_MAX_SIZE:-10m}
+      - LOG_MAX_FILES=${LOG_MAX_FILES:-5}
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    expose:
+      - "6379"
+    volumes:
+      - ./redis_data:/data
+    command: redis-server --save 60 1 --appendonly yes --appendfsync everysec
+```

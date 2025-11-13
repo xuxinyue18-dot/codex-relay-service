@@ -54,6 +54,70 @@ npm run docker:build
 npm run docker:up        # docker-compose up -d
 ```
 
+示例 docker-compose 片段（含常用环境变量）：
+```yaml
+version: '3.8'
+services:
+  codex-relay:
+    build: .
+    image: codex-relay-service:latest
+    restart: unless-stopped
+    ports:
+      - "0.0.0.0:${PORT:-3000}:3000"
+    environment:
+      # 基础
+      - NODE_ENV=production
+      - PORT=3000
+      - HOST=0.0.0.0
+
+      # 安全（必填）
+      - JWT_SECRET=${JWT_SECRET}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+      - API_KEY_PREFIX=${API_KEY_PREFIX:-cr_}
+      - WEB_SESSION_SECRET=${WEB_SESSION_SECRET:-CHANGE_ME_SESSION_SECRET}
+
+      # 管理员（可选）
+      - ADMIN_USERNAME=${ADMIN_USERNAME:-}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-}
+
+      # Redis
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-}
+      - REDIS_DB=${REDIS_DB:-0}
+
+      # Gemini OAuth（如需）
+      - GEMINI_OAUTH_CLIENT_ID=${GEMINI_OAUTH_CLIENT_ID:-}
+      - GEMINI_OAUTH_CLIENT_SECRET=${GEMINI_OAUTH_CLIENT_SECRET:-}
+
+      # 代理与限制（可选）
+      - DEFAULT_PROXY_TIMEOUT=${DEFAULT_PROXY_TIMEOUT:-600000}
+      - MAX_PROXY_RETRIES=${MAX_PROXY_RETRIES:-3}
+      - PROXY_USE_IPV4=${PROXY_USE_IPV4:-true}
+      - REQUEST_TIMEOUT=${REQUEST_TIMEOUT:-600000}
+      - DEFAULT_TOKEN_LIMIT=${DEFAULT_TOKEN_LIMIT:-1000000}
+
+      # 日志（可选）
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - LOG_MAX_SIZE=${LOG_MAX_SIZE:-10m}
+      - LOG_MAX_FILES=${LOG_MAX_FILES:-5}
+
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    expose:
+      - "6379"
+    volumes:
+      - ./redis_data:/data
+    command: redis-server --save 60 1 --appendonly yes --appendfsync everysec
+```
+
 ## API 使用
 
 - OpenAI 兼容示例（鉴权：`Authorization: Bearer <你的API Key>`）
