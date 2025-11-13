@@ -6,6 +6,8 @@
 
 如需一步步部署指引，请参见根目录的 [INSTALL.md](./INSTALL.md)（中文）与 [INSTALL_EN.md](./INSTALL_EN.md)（English）。
 
+CI 说明见 [CI.md](./CI.md)。
+
 ## 核心特性
 
 - 多后端：Claude / OpenAI / Gemini / Azure OpenAI / Bedrock
