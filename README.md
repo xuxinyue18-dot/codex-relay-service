@@ -97,6 +97,54 @@ curl -X POST http://<host>:<port>/v1/chat/completions \
 
 详见 `.env.example` 与 `config/config.example.js`。
 
+## 环境变量要点（务必检查）
+
+- 必填
+  - `JWT_SECRET`：JWT 密钥，建议≥32字符随机串
+  - `ENCRYPTION_KEY`：32字符加密密钥
+- 推荐
+  - `WEB_SESSION_SECRET`：Web 会话密钥
+- Redis 连接
+  - `REDIS_HOST`、`REDIS_PORT`、`REDIS_PASSWORD`（如需）、`REDIS_DB`
+- 代理（如需）
+  - `DEFAULT_PROXY_TIMEOUT`、`MAX_PROXY_RETRIES`、`PROXY_USE_IPV4`
+- Gemini OAuth（如需使用 Gemini 账户）
+  - `GEMINI_OAUTH_CLIENT_ID`
+  - `GEMINI_OAUTH_CLIENT_SECRET`
+
+以上变量均在 `.env.example` 提供占位，请复制为 `.env` 后按需填写。
+
+## 部署清单（开箱即用）
+
+1) 克隆并进入目录
+```bash
+git clone git@github.com:xuxinyue18-dot/codex-relay-service.git
+cd codex-relay-service
+```
+
+2) 准备配置文件
+```bash
+cp .env.example .env                  # 填写上方“环境变量要点”
+cp config/config.example.js config/config.js
+```
+
+3) 安装与初始化
+```bash
+npm install
+npm run setup
+```
+
+4) 可选：构建管理端（Admin UI）
+```bash
+npm run install:web
+npm run build:web    # 产物位于 web/admin-spa/dist
+```
+
+5) 启动服务
+```bash
+npm run service:start   # 或 npm run dev（开发模式）
+```
+
 ## 架构总览（合并自 CLAUDE.md）
 
 - 统一调度：`unifiedClaudeScheduler`、`unifiedGeminiScheduler`、`unifiedOpenAIScheduler`、`droidScheduler`
