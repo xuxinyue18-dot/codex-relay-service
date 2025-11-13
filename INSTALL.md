@@ -146,3 +146,50 @@ services:
       - ./redis_data:/data
     command: redis-server --save 60 1 --appendonly yes --appendfsync everysec
 ```
+
+---
+
+## 常见错误速查（Cheat Sheet）
+
+- 现象：启动时报 Redis 连接失败（ECONNREFUSED/ETIMEDOUT）
+  - 排查：
+    - 本地 Redis 是否运行：`redis-cli ping` 应返回 `PONG`
+    - `.env` 中 `REDIS_HOST/REDIS_PORT/REDIS_PASSWORD/REDIS_DB` 是否正确
+    - Termux 本地启动示例：`redis-server --daemonize yes`
+    - 远端 Redis：确认网络可达、防火墙与白名单
+  - 处理：修正 `.env`，确保 Redis 正常运行后重启服务
+
+- 现象：访问 `/admin-next/` 返回 404
+  - 原因：未构建前端管理界面
+  - 处理：`npm run install:web && npm run build:web`，然后重启服务
+
+- 现象：Nginx 反代后会话不粘连/偶发 401
+  - 原因：Nginx 默认丢弃带下划线的请求头（如 `session_id`）
+  - 处理：在 http 块加入 `underscores_in_headers on;` 并保留相关头部
+
+- 现象：SSE（流式响应）在代理后卡住或中断
+  - 排查：反代是否开启了压缩/缓冲，或超时太短
+  - 处理：关闭对 SSE 的 gzip/缓冲，适当放宽 `proxy_read_timeout`
+
+- 现象：端口占用（EADDRINUSE）
+  - 排查：`lsof -i:3000` 或 `ss -lntp | grep 3000`
+  - 处理：结束占用进程或修改 `.env` 的 `PORT`
+
+- 现象：跨域（CORS）错误
+  - 处理：开启 `ENABLE_CORS=true` 或在反代层正确设置 `Access-Control-Allow-*`
+
+- 现象：请求体过大（413）
+  - 处理：增大反代/网关与应用层的限制（反代的 `client_max_body_size`、应用的请求大小限制）
+
+- 现象：管理后台登录失败
+  - 排查：`data/init.json` 中的管理员是否存在；Redis 会话是否正常
+  - 处理：
+    - 使用环境变量预设管理员：`ADMIN_USERNAME`、`ADMIN_PASSWORD`
+    - 或清空初始化文件 `data/init.json` 后重启，按日志提示重新初始化
+
+- 现象：Health `/health` 显示 unhealthy
+  - 排查：看 `redis` 一项是否 healthy；检查日志 `logs/`
+  - 处理：先修复 Redis 可用性，再重启应用
+
+- 现象：Termux 中服务意外停止/休眠
+  - 处理：执行 `termux-wake-lock` 保持唤醒；使用 `npm run service:start` 守护；避免清理后台

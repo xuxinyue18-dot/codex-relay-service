@@ -146,3 +146,50 @@ services:
       - ./redis_data:/data
     command: redis-server --save 60 1 --appendonly yes --appendfsync everysec
 ```
+
+---
+
+## Common Errors (Quick Reference)
+
+- Symptom: Redis connection fails on start (ECONNREFUSED/ETIMEDOUT)
+  - Check:
+    - Local Redis is running: `redis-cli ping` should return `PONG`
+    - `.env` values: `REDIS_HOST/REDIS_PORT/REDIS_PASSWORD/REDIS_DB`
+    - Termux local start: `redis-server --daemonize yes`
+    - External Redis: reachability, firewall, allowlist
+  - Fix: correct `.env`, start Redis, then restart the app
+
+- Symptom: `/admin-next/` returns 404
+  - Cause: Admin SPA not built
+  - Fix: `npm run install:web && npm run build:web`, then restart
+
+- Symptom: sessions not sticky / intermittent 401 behind Nginx
+  - Cause: underscores in headers (e.g., `session_id`) are dropped by default
+  - Fix: add `underscores_in_headers on;` in http block and preserve headers
+
+- Symptom: SSE streaming stalls or drops behind proxy
+  - Check: proxy gzip/buffering and timeouts
+  - Fix: disable gzip/buffering for SSE; increase `proxy_read_timeout`
+
+- Symptom: Port already in use (EADDRINUSE)
+  - Check: `lsof -i:3000` or `ss -lntp | grep 3000`
+  - Fix: kill the process or change `PORT` in `.env`
+
+- Symptom: CORS errors
+  - Fix: set `ENABLE_CORS=true` or configure proper `Access-Control-Allow-*` in proxy
+
+- Symptom: Request entity too large (413)
+  - Fix: increase limits in proxy (e.g., `client_max_body_size`) and app
+
+- Symptom: Admin login fails
+  - Check: `data/init.json` exists and has admin; Redis sessions OK
+  - Fix:
+    - preset via env: `ADMIN_USERNAME`, `ADMIN_PASSWORD`
+    - or remove `data/init.json` and restart to re-initialize
+
+- Symptom: `/health` shows unhealthy
+  - Check: `redis` section; inspect app logs under `logs/`
+  - Fix: restore Redis availability, then restart app
+
+- Symptom: Termux kills or sleeps the process
+  - Fix: `termux-wake-lock`; use `npm run service:start`; keep app in foreground or use a supervisor
