@@ -7,10 +7,18 @@ This guide helps you deploy Codex Relay Service from scratch with clear, unambig
 - Redis ≥ 6 available
 - Linux/macOS or Docker
 
+### Termux notes (Android)
+- Paths and working directory: Termux home is `~/` (absolute: `/data/data/com.termux/files/home`).
+  - Example: `cd ~/codex-relay-service`
+- Node & Redis: install via `pkg` (e.g., `pkg install nodejs-lts redis`), or point to an external Redis by changing `REDIS_HOST` in `.env`.
+- Docker: not available on Termux by default — prefer the native Node workflow (skip the Docker section below).
+- Ports: default 3000 is reachable locally; to access from outside, use port forwarding/VPN/reverse proxy as appropriate.
+- Keep process awake (optional): `termux-wake-lock` if you need long-running services.
+
 ## 2. Get the project
 ```bash
 git clone git@github.com:xuxinyue18-dot/codex-relay-service.git
-cd codex-relay-service
+cd codex-relay-service   # On Termux this equals /data/data/com.termux/files/home/codex-relay-service
 ```
 
 ## 3. Configuration

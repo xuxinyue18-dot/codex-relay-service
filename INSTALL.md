@@ -7,10 +7,18 @@
 - 可用的 Redis ≥ 6
 - Linux/macOS 或 Docker 环境
 
+### Termux 使用提示（Android）
+- 路径与工作目录：Termux 的家目录为 `~/`（绝对路径：`/data/data/com.termux/files/home`）。
+  - 例如：`cd ~/codex-relay-service`
+- Node 与 Redis：可通过 `pkg` 安装（如：`pkg install nodejs-lts redis`），或连接到远端/外部 Redis（在 `.env` 里改 `REDIS_HOST`）。
+- Docker：Termux 默认不可用 Docker，建议使用“原生 Node 方式”运行（下面步骤 4 的 Docker 可跳过）。
+- 端口：默认 3000 本地可访问；若需外网访问，需额外端口映射/内网穿透/反向代理。
+- 保持进程不休眠（可选）：`termux-wake-lock` 在需要长时间运行时保持唤醒。
+
 ## 2. 获取项目
 ```bash
 git clone git@github.com:xuxinyue18-dot/codex-relay-service.git
-cd codex-relay-service
+cd codex-relay-service   # Termux 下等价于 /data/data/com.termux/files/home/codex-relay-service
 ```
 
 ## 3. 配置文件
