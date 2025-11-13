@@ -4,6 +4,8 @@
 
 — 本文为合并版文档：整合原 README 与 CLAUDE.md，去重并按实际实现梳理 —
 
+如需一步步部署指引，请参见根目录的 INSTALL.md（中文）与 INSTALL_EN.md（English）。
+
 ## 核心特性
 
 - 多后端：Claude / OpenAI / Gemini / Azure OpenAI / Bedrock
