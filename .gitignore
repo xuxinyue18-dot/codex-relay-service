@@ -254,3 +254,5 @@ web/admin-spa/dist/
 !redis_data/.gitkeep
 
 !temp/.gitkeep
+
+!web/admin-spa/dist/.gitkeep
