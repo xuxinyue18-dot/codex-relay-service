@@ -32,6 +32,7 @@ logs/
 *.log
 startup.log
 app.log
+!logs/.gitkeep
 
 # Configuration files (may contain sensitive data)
 config/config.js
@@ -249,3 +250,7 @@ web/apiStats/
 
 # Admin SPA build files
 web/admin-spa/dist/
+
+!redis_data/.gitkeep
+
+!temp/.gitkeep
