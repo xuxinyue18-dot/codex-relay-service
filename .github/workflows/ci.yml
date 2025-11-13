@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [ 18.x ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Admin SPA deps
+        run: npm run install:web
+
+      - name: Build Admin SPA
+        run: npm run build:web
+
+      - name: Lint (no write)
+        run: npm run lint:check
+
+      - name: Tests (pass with no tests)
+        run: npm test -- --passWithNoTests
+
+      - name: Upload Admin SPA artifact (for PR preview)
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-admin-spa-dist
+          path: web/admin-spa/dist
+          if-no-files-found: warn
+
