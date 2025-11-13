@@ -161,7 +161,7 @@ curl -X POST http://<host>:<port>/v1/chat/completions \
 - Users: `USER_MANAGEMENT_ENABLED`, `MAX_API_KEYS_PER_USER`
 - Webhook: `WEBHOOK_ENABLED`, `WEBHOOK_URLS`, `WEBHOOK_RETRIES`
 
-See `.env.example` and `config/config.example.js` for defaults and details.
+See [`.env.example`](./.env.example) and [`config/config.example.js`](./config/config.example.js) for defaults and details.
 
 ## Environment Variables (must‑check)
 

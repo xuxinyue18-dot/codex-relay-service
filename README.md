@@ -4,7 +4,7 @@
 
 — 本文为合并版文档：整合原 README 与 CLAUDE.md，去重并按实际实现梳理 —
 
-如需一步步部署指引，请参见根目录的 INSTALL.md（中文）与 INSTALL_EN.md（English）。
+如需一步步部署指引，请参见根目录的 [INSTALL.md](./INSTALL.md)（中文）与 [INSTALL_EN.md](./INSTALL_EN.md)（English）。
 
 ## 核心特性
 
@@ -27,11 +27,11 @@
 ## 快速开始
 
 1) 配置环境变量
-- 复制 `.env.example` 为 `.env`，至少设置：
+- 复制 [`.env.example`](./.env.example) 为 `.env`，至少设置：
   - `PORT`、`HOST`
   - `JWT_SECRET`、`ENCRYPTION_KEY`
   - `REDIS_HOST`、`REDIS_PORT`、`REDIS_PASSWORD`（如需）
-  - 更多选项见 `config/config.example.js`
+  - 更多选项见 [`config/config.example.js`](./config/config.example.js)
 
 2) 安装与初始化
 ```bash
