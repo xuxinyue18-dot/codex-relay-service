@@ -20,6 +20,8 @@ This is the consolidated English guide (merged and de‑duplicated from the Chin
 - Redis >= 6 (sessions, queues, metrics)
 - Linux/macOS/Docker
 
+Note: Termux (Android) users — see the "Termux notes (Android)" section in INSTALL_EN.md for path, Redis, and runtime tips.
+
 ## Quick Start
 
 1) Environment variables

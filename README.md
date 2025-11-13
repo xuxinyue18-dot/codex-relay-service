@@ -22,6 +22,8 @@
 - Redis >= 6（会话、队列、统计）
 - Linux/macOS/Docker 均可
 
+提示：Termux（Android）用户请参见 INSTALL.md 中的“Termux 使用提示（Android）”小节，包含路径、Redis 与进程运行等注意事项。
+
 ## 快速开始
 
 1) 配置环境变量
