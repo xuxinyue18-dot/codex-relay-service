@@ -32,6 +32,27 @@ Check these first:
 
 All variables are documented in `.env.example`.
 
+### Minimal .env example (copy, then adjust)
+
+```env
+# Basics
+NODE_ENV=production
+HOST=0.0.0.0
+PORT=3000
+
+# Security (required)
+JWT_SECRET=please-change-to-a-random-string-at-least-32-chars
+ENCRYPTION_KEY=32-characters-long-encryption-secret-please-change
+WEB_SESSION_SECRET=change-me-session-secret
+API_KEY_PREFIX=cr_
+
+# Redis (adjust to your environment)
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=
+REDIS_DB=0
+```
+
 ## 4. Install and initialize
 ```bash
 npm install

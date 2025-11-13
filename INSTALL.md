@@ -32,6 +32,27 @@ cp config/config.example.js config/config.js
 
 全部变量见 `.env.example` 对应注释。
 
+### 最小 .env 示例（可直接复制粘贴后修改）
+
+```env
+# 基础
+NODE_ENV=production
+HOST=0.0.0.0
+PORT=3000
+
+# 安全（必填）
+JWT_SECRET=please-change-to-a-random-string-at-least-32-chars
+ENCRYPTION_KEY=32-characters-long-encryption-secret-please-change
+WEB_SESSION_SECRET=change-me-session-secret
+API_KEY_PREFIX=cr_
+
+# Redis（按你的环境调整）
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=
+REDIS_DB=0
+```
+
 ## 4. 安装与初始化
 ```bash
 npm install
