@@ -97,6 +97,54 @@ curl -X POST http://<host>:<port>/v1/chat/completions \
 
 See `.env.example` and `config/config.example.js` for defaults and details.
 
+## Environment Variables (must‑check)
+
+- Required
+  - `JWT_SECRET`: JWT secret (recommend ≥ 32 chars random)
+  - `ENCRYPTION_KEY`: 32‑char encryption key
+- Recommended
+  - `WEB_SESSION_SECRET`: web session secret
+- Redis connection
+  - `REDIS_HOST`, `REDIS_PORT`, `REDIS_PASSWORD` (if any), `REDIS_DB`
+- Proxy (optional)
+  - `DEFAULT_PROXY_TIMEOUT`, `MAX_PROXY_RETRIES`, `PROXY_USE_IPV4`
+- Gemini OAuth (optional, if you use Gemini accounts)
+  - `GEMINI_OAUTH_CLIENT_ID`
+  - `GEMINI_OAUTH_CLIENT_SECRET`
+
+All variables have placeholders in `.env.example`. Copy it to `.env` and fill accordingly.
+
+## Deployment Checklist (ready to run)
+
+1) Clone and enter the project
+```bash
+git clone git@github.com:xuxinyue18-dot/codex-relay-service.git
+cd codex-relay-service
+```
+
+2) Prepare configuration
+```bash
+cp .env.example .env                   # fill variables listed above
+cp config/config.example.js config/config.js
+```
+
+3) Install and initialize
+```bash
+npm install
+npm run setup
+```
+
+4) Optional: build Admin UI
+```bash
+npm run install:web
+npm run build:web    # output under web/admin-spa/dist
+```
+
+5) Start service
+```bash
+npm run service:start   # or npm run dev for development
+```
+
 ## Architecture Overview
 
 - Unified schedulers: `unifiedClaudeScheduler`, `unifiedGeminiScheduler`, `unifiedOpenAIScheduler`, `droidScheduler`
@@ -147,4 +195,3 @@ See `.env.example` and `config/config.example.js` for defaults and details.
 ## License
 
 MIT (see `LICENSE`)
-
